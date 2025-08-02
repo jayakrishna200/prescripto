@@ -10,6 +10,7 @@ import MyAppointments from './pages/MyAppointments.jsx'
 import MyProfile from './pages/MyProfile.jsx'
 import Appointment from './pages/Appointment.jsx'
 import Navbar from './components/Navbar'
+import Footer from './components/footer.jsx'
 const App = () => {
   return (
     <div className='mx-4 sm:mx-[10%]'>
@@ -23,10 +24,11 @@ const App = () => {
       <Route exact path='/contact' element={<Contact/>} />
       <Route exact path='/my-appointments' element={<MyAppointments/>} />
       <Route exact path='/my-profile' element={<MyProfile/>} />
-      <Route exact path='/appointment/:doctorId' element={<Appointment/>} />
+      <Route exact path='/appointment/:docId' element={<Appointment/>} />
       {/* Catch-all route for 404 Not Found */}
       <Route path='*' element={<h1 className='text-3xl text-red-500'>404 Not Found</h1>} />
      </Routes>
+     <Footer/>
     </div>
   )
 }
