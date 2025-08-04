@@ -6,6 +6,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  console.log(name)
   const onSubmitHandler = async (event) => {
     event.preventDefault();
   };
