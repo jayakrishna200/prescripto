@@ -11,11 +11,14 @@ import MyProfile from './pages/MyProfile.jsx'
 import Appointment from './pages/Appointment.jsx'
 import Navbar from './components/Navbar'
 import Footer from './components/footer.jsx'
+import { ToastContainer, toast } from 'react-toastify';
+
 const App = () => {
   return (
     <div className='mx-4 sm:mx-[10%]'>
+      <ToastContainer/>
       <Navbar/>
-     <Routes>
+      <Routes>
       <Route exact path='/' element={<Home/>} />
       <Route exact path='/doctors' element={<Doctors/>} />
       <Route exact path='/doctors/:speciality' element={<Doctors/>} />
