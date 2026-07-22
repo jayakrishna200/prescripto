@@ -1,0 +1,17 @@
+GET http://localhost:4000/
+
+
+###
+POST http://localhost:4000/api/admin/add-doctor
+Content-Type:application/json 
+{
+"name":"Jaya",
+"email":"email@gmail.com"
+}
+###
+POST http://localhost:4000/api/admin/login
+Content-Type: application/json
+{
+    "email":"admin@prescripto.com",
+    "password":"querty123"
+}
