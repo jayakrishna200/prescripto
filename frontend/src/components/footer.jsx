@@ -37,7 +37,7 @@ const footer = () => {
       {/*-------Copyright Section Footer-----------------*/}
       <div>
         <hr />
-        <p className="py-5 text-sm text-center">Copyright 2024 @ Greatstack.dev - All Right Reserved.</p>
+        <p className="py-5 text-sm text-center"> © 2026 Jaya Krishna. Built with passion.</p>
       </div>
     </div>
   );
