@@ -19,10 +19,10 @@ const Contact = () => {
         <div className='flex flex-col justify-center items-start gap-6 '>
           <p className='font-semibold text-lg text-gray-600'>OUR OFFICE</p>
           <p className='text-gray-500'>
-            00000 Willms Station Suite 000, Washington, USA
+            Mk Patnam, Rolugunta (MD), Anakapalli (DT), Andhra Pradesh, India
           </p>
           <p className='text-gray-500'>
-            Tel: (000) 000-0000 Email: greatstackdev@gmail.com
+            Tel: +91 7893821485 Email: jayakrishnagundupu@gmail.com
           </p>
           <p className='font-semibold text-lg text-gray-600'>
             CAREERS AT PRESCRIPTO
