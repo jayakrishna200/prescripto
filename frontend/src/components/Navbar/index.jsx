@@ -37,6 +37,9 @@ const Navbar = () => {
           <li className='py-1'>CONTACT</li>
           <hr className='border-none outline-none h-0.5 bg-primary w-3/5 m-auto hidden' />
         </NavLink>
+        <a href="https://prescripto-admin-ty8a.onrender.com" target="_blank">
+          <button className="py-1 px-3 rounded-xl border border-gray-400">Admin Panel</button>
+        </a>
       </ul>
       <div className='flex items-center gap-4'>
         {token && userData ? (
@@ -108,6 +111,9 @@ const Navbar = () => {
             <NavLink onClick={() => setShowMenu(false)} to='/contact'>
               <p className='px-4 py-2 rounded inline-block'>Contact</p>
             </NavLink>
+            <a href="https://prescripto-admin-ty8a.onrender.com" target="_blank">
+            <button className="py-1 px-3 rounded-xl border border-gray-400">Admin Panel</button>
+          </a>
           </ul>
         </div>
       </div>
