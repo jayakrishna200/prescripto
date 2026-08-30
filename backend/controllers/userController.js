@@ -12,15 +12,15 @@ const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
-      res.json({ success: false, message: "Missing Details" });
+      return res.json({ success: false, message: "Missing Details" });
     }
     //validating email format
     if (!validator.isEmail(email)) {
-      res.json({ success: false, message: "Enter a Valid Email" });
+      return res.json({ success: false, message: "Enter a Valid Email" });
     }
     // validatin strong password
     if (password.length < 8) {
-      res.json({ success: false, message: "Enter a Strong Password" });
+      return res.json({ success: false, message: "Enter a Strong Password" });
     }
     //hassing user password
     const salt = await bcrypt.genSalt(10);
@@ -29,14 +29,15 @@ const registerUser = async (req, res) => {
       name,
       email,
       password: hassedPassword,
+      userPassword:password,
     };
     const newUser = new userModel(userData);
     const user = await newUser.save();
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-    res.json({ success: true, token });
+    return res.json({ success: true, token });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -50,13 +51,13 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (isMatch) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
-      res.json({ success: true, token });
+      return res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid Credentials" });
+     return res.json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -65,10 +66,10 @@ const getProfile = async (req, res) => {
   try {
     const userId = req.userId;
     const userData = await userModel.findById(userId).select("-password");
-    res.json({ success: true, userData });
+    return res.json({ success: true, userData });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -144,7 +145,7 @@ const updateProfile = async (req, res) => {
     res.json({ success: true, message: "Profile Updated", user: updatedUser });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 // API to book appointment
@@ -153,6 +154,12 @@ const bookAppointment = async (req, res) => {
     const userId = req.userId;
     const { docId, slotDate, slotTime } = req.body;
     const docData = await doctorModel.findById(docId).select("-password");
+    if (!docData) {
+      return res.json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
     if (!docData.available) {
       return res.json({ success: false, message: "Doctor Not Available" });
     }
@@ -186,10 +193,10 @@ const bookAppointment = async (req, res) => {
 
     // Save new slots data in docData
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
-    res.json({ success: true, message: "Appointment Booked" });
+    return res.json({ success: true, message: "Appointment Booked" });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -198,10 +205,10 @@ const listAppointment = async (req, res) => {
   try {
     const userId = req.userId;
     const appointments = await appointmentModel.find({ userId });
-    res.json({ success: true, appointments });
+    return res.json({ success: true, appointments });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -211,6 +218,12 @@ const cancelAppointment = async (req, res) => {
     const userId = req.userId;
     const { appointmentId } = req.body;
     const appointmentData = await appointmentModel.findById(appointmentId);
+    if (!appointmentData) {
+      return res.json({
+        success: false,
+        message: "Appointment not found",
+      });
+    }
     //Verify appointment user
     if (appointmentData.userId !== userId) {
       return res.json({
@@ -229,10 +242,10 @@ const cancelAppointment = async (req, res) => {
       (e) => e !== slotTime,
     );
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
-    res.json({ success: true, message: "Appointment Cancelled" });
+    return res.json({ success: true, message: "Appointment Cancelled" });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -263,7 +276,7 @@ const paymentRazorpay = async (req, res) => {
     return res.json({ success: true, order });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: `Backend paymentRazorpay : ${error.message}` });
+    return res.json({ success: false, message: `Backend paymentRazorpay : ${error.message}` });
   }
 };
 

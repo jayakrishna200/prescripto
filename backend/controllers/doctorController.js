@@ -10,20 +10,20 @@ const changeAvailability = async (req, res) => {
     await doctorModel.findByIdAndUpdate(docId, {
       available: !docData.available,
     });
-    res.json({ success: true, message: "Availability Changed" });
+    return res.json({ success: true, message: "Availability Changed" });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
 const doctorList = async (req, res) => {
   try {
     const doctors = await doctorModel.find({}).select(["-password", "-email"]);
-    res.json({ success: true, doctors });
+    return res.json({ success: true, doctors });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -47,7 +47,7 @@ const loginDoctor = async (req, res) => {
     }
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -59,7 +59,7 @@ const appointmentsDoctor = async (req, res) => {
     return res.json({ success: true, appointments });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -79,7 +79,7 @@ const appointmentComplete = async (req, res) => {
     }
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -99,7 +99,7 @@ const appointmentCancel = async (req, res) => {
     }
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -129,7 +129,7 @@ const doctorDashboard = async (req, res) => {
     return res.json({ success: true, dashData });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -140,7 +140,7 @@ const doctorProfile = async (req, res) => {
     const profileData = await doctorModel.findById(docId).select("-password");
     return res.json({ success: true, profileData });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -152,7 +152,7 @@ const updateDoctorProfile = async (req, res) => {
     await doctorModel.findByIdAndUpdate(docId, { fees, address, available });
     return res.json({ success: true, message: "Profile Updated" });
   } catch (error) {
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 

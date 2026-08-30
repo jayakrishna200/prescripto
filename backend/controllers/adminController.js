@@ -93,10 +93,10 @@ const addDoctor = async (req, res) => {
     };
     const newDoctor = new doctorModel(doctorData);
     await newDoctor.save();
-    res.json({ success: true, message: "Doctor Added" });
+    return res.json({ success: true, message: "Doctor Added" });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -110,13 +110,13 @@ const loginAdmin = async (req, res) => {
       password === process.env.ADMIN_PASSWORD
     ) {
       const token = jwt.sign(email + password, process.env.JWT_SECRET);
-      res.json({ success: true, token });
+      return res.json({ success: true, token });
     } else {
-      res.json({ success: false, message: "Invalid Credentials" });
+      return res.json({ success: false, message: "Invalid Credentials" });
     }
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -124,10 +124,10 @@ const loginAdmin = async (req, res) => {
 const allDoctors = async (req, res) => {
   try {
     const doctors = await doctorModel.find({}).select("-password");
-    res.json({ success: true, doctors });
+    return res.json({ success: true, doctors });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -140,7 +140,7 @@ const appointmentsAdmin = async (req, res) => {
     return res.json({ success: true, appointments });
   } catch (error) {
     console.log("Error coming bhai", error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -149,6 +149,12 @@ const appointmentCancel = async (req, res) => {
   try {
     const { appointmentId } = req.body;
     const appointmentData = await appointmentModel.findById(appointmentId);
+    if (!appointmentData) {
+      return res.json({
+        success: false,
+        message: "Appointment not found",
+      });
+    }
     //Verify appointment user
     await appointmentModel.findByIdAndUpdate(appointmentId, {
       cancelled: true,
@@ -156,15 +162,21 @@ const appointmentCancel = async (req, res) => {
     //releasing doctors slot
     const { docId, slotDate, slotTime } = appointmentData;
     const doctorData = await doctorModel.findById(docId);
+    if (!doctorData) {
+      return res.json({
+        success: false,
+        message: "Doctor not found",
+      });
+    }
     let slots_booked = doctorData.slots_booked;
     slots_booked[slotDate] = slots_booked[slotDate].filter(
       (e) => e !== slotTime,
     );
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
-    res.json({ success: true, message: "Appointment Cancelled" });
+    return res.json({ success: true, message: "Appointment Cancelled" });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
@@ -184,7 +196,7 @@ const adminDashboard = async (req, res) => {
     return res.json({ success: true, dashData });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    return res.json({ success: false, message: error.message });
   }
 };
 
