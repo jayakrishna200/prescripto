@@ -6,6 +6,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { IoMdEyeOff } from "react-icons/io";
+import { IoEye } from "react-icons/io5";
+
 
 const Login = () => {
   const { backendUrl, token, setToken } = useContext(AppContext);
@@ -13,12 +16,19 @@ const Login = () => {
   const [state, setState] = useState("Sign Up");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword]=useState("")
   const [name, setName] = useState("");
+  const [showPassword,setShowPassword]=useState(false)
+  const passwordType = showPassword ? "text" : "password";
   console.log(name);
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
       if (state === "Sign Up") {
+        if(password!==confirmPassword){
+          toast.error("Password and Confirm password Should be Match");
+          return
+        }
         const { data } = await axios.post(backendUrl + "/api/user/register", {
           name,
           password,
@@ -46,6 +56,9 @@ const Login = () => {
       toast.error(error.message)
     }
   };
+  const changeShowPasswordStatus=()=>{
+    setShowPassword(!showPassword);
+  }
   useEffect(()=>{
     if(token){
       navigate("/")
@@ -86,15 +99,50 @@ const Login = () => {
         </div>
         <div className='w-full'>
           <p>Password</p>
-          <input
-            className='border border-zinc-300 rounded w-full p-2 mt-1'
-            type='password'
-            onChange={(e) => setPassword(e.target.value)}
-            value={password}
-            required
-          />
+          <div className='relative w-full mt-1'>
+            {/* Password input */}
+            <input
+              className='w-full border border-zinc-300 rounded p-2 pr-10'
+              type={passwordType}
+              onChange={(e) => setPassword(e.target.value)}
+              value={password}
+              required
+            />
+            <button
+              className='absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-0 cursor-pointer'
+              onClick={changeShowPasswordStatus}
+              type='button'
+            >
+              {!showPassword && <IoMdEyeOff size='25' color='#64748b' />}
+              {showPassword && <IoEye size='25' color='#64748b' />}
+            </button> 
+          </div>
         </div>
-        <button type="submit" className='bg-primary text-white w-full py-2 rounded-md text-base'>
+        <div className='w-full'>
+          <p>Confirm password</p>
+          <div className='relative w-full mt-1'>
+            {/* Confirm Password input */}
+            <input
+              className='w-full border border-zinc-300 rounded p-2 pr-10'
+              type={passwordType}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              value={confirmPassword}
+              required
+            />
+            <button
+              className='absolute right-2 top-1/2 -translate-y-1/2 bg-transparent border-0 cursor-pointer'
+              onClick={changeShowPasswordStatus}
+              type='button'
+            >
+              {!showPassword && <IoMdEyeOff size='25' color='#64748b' />}
+              {showPassword && <IoEye size='25' color='#64748b' />}
+            </button> 
+          </div>
+        </div>
+        <button
+          type='submit'
+          className='bg-primary text-white w-full py-2 rounded-md text-base'
+        >
           {state === "Sign Up" ? "Create Account" : "Login"}{" "}
         </button>
         {state === "Sign Up" ? (
